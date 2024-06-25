@@ -1,0 +1,37 @@
+#include <stdio.h>
+#include <string.h>
+
+typedef struct {
+    char placa[101];
+    double gasolina;
+    double distancia;
+} carro;
+
+void ler(carro *carro){
+    scanf("%s %lf %lf", (*carro).placa, &(*carro).distancia, &(*carro).gasolina);
+}
+double consumo (carro carro){
+    return carro.distancia / carro.gasolina;
+}
+
+void escreve(double consumo){
+    if (consumo < 8){
+        printf( "Venda o carro!\n");
+    } else if (consumo >= 8 && consumo <= 12) {
+        printf("Economico!\n");
+    } else if (consumo > 12){
+        printf("Super economico!\n");
+    }
+}
+
+int main()
+{
+    double cons;
+    carro carro;
+    ler(&carro);
+    cons = consumo(carro);
+    escreve(cons);
+    return 0;
+} 
+
+
