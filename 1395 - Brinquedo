@@ -1,0 +1,35 @@
+#include <stdio.h>
+#include <string.h>
+
+typedef struct {
+    int cod;
+    char categoria[31];
+    char nome[51];
+    float preco;
+    int qntd;
+} brinquedo;
+
+void registrar(brinquedo *brinquedo){
+    scanf("%d\n", &(*brinquedo).cod);
+    scanf("%[^\n]\n", (*brinquedo).nome);
+    scanf("%[^\n]\n", (*brinquedo).categoria);
+    scanf("%f", &(*brinquedo).preco);
+    scanf("%d", &(*brinquedo).qntd);
+}
+
+void mostrar(brinquedo brinquedo){
+    printf("%-11s: %04d\n", "Codigo", brinquedo.cod);
+    printf("%-11s: %s\n", "Nome", brinquedo.nome);
+    printf("%-11s: %s\n", "Categoria", brinquedo.categoria);
+    printf("%-11s: R$ %.2f\n", "Preco", brinquedo.preco);
+    printf("%-11s: %d\n", "Quantidade", brinquedo.qntd);
+}
+int main()
+{
+    brinquedo brinquedo;
+    registrar(&brinquedo);
+    mostrar(brinquedo);
+    return 0;
+} 
+
+
