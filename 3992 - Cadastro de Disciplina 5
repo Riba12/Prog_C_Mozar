@@ -1,0 +1,253 @@
+#include <stdio.h>
+#include <math.h>
+#include <stdbool.h>
+#include <string.h>
+
+
+typedef struct{
+    int codigo;
+    char nome[201];
+    char prof[201];
+    int cred;
+    int ano;
+    int semestre;
+    double nt1;
+    double nt2;
+    double media;
+}materias;
+
+typedef struct{
+    int codigo;
+    char nome[201];
+    char prof[201];
+    int cred;
+    int ano;
+    int semestre;
+    double nt1;
+    double nt2;
+    double media;
+}materias1;
+
+typedef struct{
+    int codigo;
+    char nome[201];
+    char prof[201];
+    int cred;
+    int ano;
+    int semestre;
+    double nta;
+    double ntr;
+    double ntp;
+    double media;
+}materias2;
+
+void input(materias *materia){
+   scanf("%d%*c",&(*materia).codigo);
+   scanf("%[^\n]%*c",(*materia).nome);
+   scanf("%[^\n]%*c",(*materia).prof);
+   scanf("%i",&(*materia).cred);
+   scanf("%i",&(*materia).ano);
+   scanf("%i",&(*materia).semestre);
+   scanf("%lf",&(*materia).nt1);
+   scanf("%lf",&(*materia).nt2);
+}
+void input2(materias2 *materia){
+   scanf("%d%*c",&(*materia).codigo);
+   scanf("%[^\n]%*c",(*materia).nome);
+   scanf("%[^\n]%*c",(*materia).prof);
+   scanf("%i",&(*materia).cred);
+   scanf("%i",&(*materia).ano);
+   scanf("%i",&(*materia).semestre);
+   scanf("%lf",&(*materia).nta);
+   scanf("%lf",&(*materia).ntr);
+   scanf("%lf",&(*materia).ntp);
+}
+
+double media(double a, double b, int tipo){
+    switch(tipo){
+        case 1:
+            return (a + 2*b) / 3;
+        case 2: 
+            return (a + b) / 2;
+    }
+}
+double media3(double a, double b, double c){
+    return (2*a + 3*b + 5*c) / 10;
+}
+
+int achar_codigo(int codigo,int index_mat, materias* listaMaterias) {
+    int i;
+    
+    for (i = 0; i < index_mat; i++) {
+                if(listaMaterias[i].codigo == codigo ){
+                    return i;
+                }
+            }
+    return -1;
+}
+
+void listar(int index_mat, materias* listaMaterias){
+    int i;
+    char ok[4];
+    
+    printf("%4s %-50s %4s %4s/%1s %5s\n", "Cod.", "Nome", "Cred", "Ano", "S", "Media");
+    for ( i = 0; i < index_mat; i++) {
+        if(listaMaterias[i].codigo > 0){
+            printf("%04d %-50s %4d %4d/%d %05.2lf\n", listaMaterias[i].codigo, listaMaterias[i].nome, listaMaterias[i].cred, listaMaterias[i].ano, listaMaterias[i].semestre, listaMaterias[i].media);
+        }
+    }
+    while (strcmp(ok, "Ok") != 0){
+        scanf("%s", ok);
+    }
+}
+void listar_sem(int index_mat, int ano, int sem, materias* listaMaterias){
+    int i;
+    char ok[4] ="";
+    
+    printf("%4s %-50s %4s %4s/%1s %5s\n", "Cod.", "Nome", "Cred", "Ano", "S", "Media");
+    for ( i = 0; i < index_mat; i++) {
+        if(listaMaterias[i].ano == ano && listaMaterias[i].semestre == sem){
+            printf("%04d %-50s %4d %4d/%d %05.2lf\n", listaMaterias[i].codigo, listaMaterias[i].nome, listaMaterias[i].cred, listaMaterias[i].ano, listaMaterias[i].semestre, listaMaterias[i].media);
+        }
+    }
+    while (strcmp(ok, "Ok") != 0){
+        scanf("%s", ok);
+    }
+}
+void listar_nome(int index_mat, char* nome, materias* listaMaterias){
+    int i;
+    char ok[4] ="";
+    
+    printf("%4s %-50s %4s %4s/%1s %5s\n", "Cod.", "Nome", "Cred", "Ano", "S", "Media");
+    for ( i = 0; i < index_mat; i++) {
+        if(strstr(listaMaterias[i].prof, nome) != NULL || strstr(listaMaterias[i].nome, nome) != NULL){
+            printf("%04d %-50s %4d %4d/%d %05.2lf\n", listaMaterias[i].codigo, listaMaterias[i].nome, listaMaterias[i].cred, listaMaterias[i].ano, listaMaterias[i].semestre, listaMaterias[i].media);
+        }
+    }
+    while (strcmp(ok, "Ok") != 0){
+        scanf("%s", ok);
+    }
+}
+
+void historico(int index_mat, materias* listaMaterias, int index_mat2, materias2* listaMaterias2){
+    int i, num_cred = 0;
+    char ok[4] ="";
+    double nota = 0;
+    
+    printf("%4s %-50s %4s %4s/%1s %5s\n", "Cod.", "Nome", "Cred", "Ano", "S", "Media");
+    for ( i = 0; i < index_mat; i++) {
+        if(listaMaterias[i].codigo >= 0){
+            printf("%04d %-50s %4d %4d/%d %05.2lf\n", listaMaterias[i].codigo, listaMaterias[i].nome, listaMaterias[i].cred, listaMaterias[i].ano, listaMaterias[i].semestre, listaMaterias[i].media);
+            num_cred += listaMaterias[i].cred;
+            nota += listaMaterias[i].media * listaMaterias[i].cred;
+        }
+    }
+    for ( i = 0; i < index_mat2; i++) {
+        if(listaMaterias2[i].codigo >= 0){
+            printf("%04d %-50s %4d %4d/%d %05.2lf\n", listaMaterias2[i].codigo, listaMaterias2[i].nome, listaMaterias2[i].cred, listaMaterias2[i].ano, listaMaterias2[i].semestre, listaMaterias2[i].media);
+            num_cred += listaMaterias2[i].cred;
+            nota += listaMaterias2[i].media * listaMaterias2[i].cred;
+        }
+    }
+    if(num_cred > 0){
+        nota = nota/num_cred;
+    } else {
+        nota = 0.0;
+    }
+    printf("%-67s %05.2lf\n", "Coeficiente de Rendimento", nota);
+    while (strcmp(ok, "Ok") != 0){
+        scanf("%s", ok);
+    }
+}
+
+int menu(){
+    int resposta = 0;
+    
+    while (resposta < 1 || resposta > 10){
+        printf("1 - inserir nova disciplina tipo 1\n2 - inserir nova disciplina tipo 2\n3 - inserir nova disciplina tipo 3\n4 - remover disciplina pelo codigo\n5 - alterar disciplina pelo codigo\n"
+        "6 - listar todas as disciplinas\n7 - listar disciplinas de um ano/semestre\n8 - listar disciplinas pelo nome/professor\n"
+        "9 - Historico\n10 - sair\nEntre com a sua opcao:\n");
+        scanf("%d", &resposta);
+    }
+    return resposta;
+    
+}
+
+int main()
+{
+    materias listaMaterias[25];
+    materias2 listaMaterias2[25];
+    int index_mat = 0;
+    int index_mat2 = 0;
+    int i, codigo, ano, semestre;
+    materias materia;
+    materias2 materia2;
+    char nome[201];
+    bool rodando = true;
+    while(rodando){
+     switch(menu()){
+         case 1:
+            input(&materia);
+            materia.media = media(materia.nt1, materia.nt2, 1);
+            printf("Disciplina inserida com sucesso!\n");
+            listaMaterias[index_mat] = materia;
+            index_mat++;
+            break;
+        case 2:
+            input(&materia);
+            materia.media = media(materia.nt1, materia.nt2, 2);
+            printf("Disciplina inserida com sucesso!\n");
+            listaMaterias[index_mat] = materia;
+            index_mat++;
+            break;
+        case 3:
+            input2(&materia2);
+            materia2.media = media3(materia2.nta, materia2.ntr, materia2.ntp);
+            printf("Disciplina inserida com sucesso!\n");
+            listaMaterias2[index_mat2] = materia2;
+            index_mat2++;
+            break;
+        case 4:
+            scanf("%d", &codigo);
+            i = achar_codigo(codigo, index_mat, listaMaterias);
+            if(i >= 0){
+                listaMaterias[i].codigo = -1;
+                printf("Disciplina removida com sucesso!\n");
+            } else {
+                printf("Disciplina nao encontrada!\n");
+            }
+            break;
+        case 5:
+             scanf("%d", &codigo);
+             i = achar_codigo(codigo, index_mat, listaMaterias);
+            if(i >= 0){
+                input(&materia);
+                materia.media = media(materia.nt1, materia.nt2, 1);
+                printf("Disciplina alterada com sucesso!\n");
+                listaMaterias[i] = materia;
+            } else {
+                printf("Disciplina nao encontrada!\n");
+            }
+            break;
+        case 6:
+            listar(index_mat, listaMaterias);
+            break;
+        case 7:
+            scanf("%d %d", &ano, &semestre);
+            listar_sem(index_mat, ano, semestre, listaMaterias);
+            break;
+        case 8:
+            scanf(" %[^\n]%*c", nome); 
+            listar_nome(index_mat, nome, listaMaterias);
+            break;
+        case 9:
+            historico(index_mat, listaMaterias, index_mat2, listaMaterias2);
+            break;
+        case 10:
+            printf("Obrigado por utilizar o programa de cadastro, volte sempre!\n");
+            rodando = false;
+            break;
+    }
+    }
+    return 0;
+}
