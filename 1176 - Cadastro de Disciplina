@@ -1,0 +1,52 @@
+#include <stdio.h>
+#include <string.h>
+
+typedef struct {
+    int code;
+    char name[101];
+    char prof[101];
+    int cred;
+    int ano;
+    int sem;
+    double nt1;
+    double nt2;
+} matricula;
+
+double media(matricula aluno)
+{
+  return (aluno.nt1 + 2 *aluno.nt2)/3; 
+}
+
+int main()
+{
+    double m;
+    matricula aluno;
+    
+    scanf("%d", &aluno.code);
+    getchar();
+    scanf("%[^\n]\n", aluno.name);
+    scanf("%[^\n]\n", aluno.prof);
+    scanf("%d", &aluno.cred);
+    scanf("%d", &aluno.ano);
+    scanf("%d", &aluno.sem);
+    scanf("%lf", &aluno.nt1);
+    scanf("%lf", &aluno.nt2);
+    
+    m = media(aluno);
+    
+    printf("%-10s: %04d\n", "Codigo", aluno.code);
+    printf("%-10s: %s\n", "Nome", aluno.name);
+    printf("%-10s: %s\n", "Professor", aluno.prof);
+    printf("%-10s: %d\n", "Creditos", aluno.cred);
+    printf("%-10s: %d\n", "Ano", aluno.ano);
+    printf("%-10s: %d\n", "Semestre", aluno.sem);
+    printf("%-10s: %.2lf\n", "Nota1", aluno.nt1);
+    printf("%-10s: %.2lf\n", "Nota2", aluno.nt2);
+    printf("%-10s: %.2lf\n", "Media", m);
+
+    
+
+    return 0;
+} 
+
+
