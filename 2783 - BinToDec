@@ -1,0 +1,46 @@
+#include <stdio.h>
+#include <math.h>
+#include <string.h>
+
+int conversor(char* recebido){
+    int tamanho, convertido = 0;
+    tamanho = strlen(recebido);
+    
+    for (int i = tamanho - 1; i >= 0; i--) {
+        if(recebido[i] == '1'){
+            convertido = convertido + pow(2, tamanho - 1 -i);
+        }
+        if(recebido[i] != '0' && recebido[i] != '1'){
+            return -1;
+        }
+    }
+    return convertido;
+}
+
+void ler_numero(char* palavra){
+    scanf("%s", palavra); 
+}
+
+int main()
+{
+    int a = 0;
+    int numero;
+    char palavra[21];
+    
+    while(a == 0){
+         ler_numero(palavra);
+        if(strcmp("0", palavra) == 0){
+            a = 1;
+        }
+        else {
+            numero = conversor(palavra);
+            if(numero == -1){
+                printf("[%20s] %s\n",palavra, "invalid");
+            }else{
+                printf("[%20s] %d\n",palavra, numero);
+            }
+        }
+    }
+
+    return 0;
+}
