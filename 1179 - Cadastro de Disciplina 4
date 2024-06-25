@@ -1,0 +1,185 @@
+#include <stdio.h>
+#include <math.h>
+#include <stdbool.h>
+#include <string.h>
+
+
+typedef struct{
+    int codigo;
+    char nome[201];
+    char prof[201];
+    int cred;
+    int ano;
+    int semestre;
+    double nt1;
+    double nt2;
+    double media;
+}materias;
+
+void input(materias *materia){
+   scanf("%d%*c",&(*materia).codigo);
+   scanf("%[^\n]%*c",(*materia).nome);
+   scanf("%[^\n]%*c",(*materia).prof);
+   scanf("%i",&(*materia).cred);
+   scanf("%i",&(*materia).ano);
+   scanf("%i",&(*materia).semestre);
+   scanf("%lf",&(*materia).nt1);
+   scanf("%lf",&(*materia).nt2);
+}
+
+double media(double a, double b){
+    return (a + 2*b) / 3;
+}
+
+int achar_codigo(int codigo,int index_mat, materias* listaMaterias) {
+    int i;
+    
+    for (i = 0; i < index_mat; i++) {
+                if(listaMaterias[i].codigo == codigo ){
+                    return i;
+                }
+            }
+    return -1;
+}
+
+void listar(int index_mat, materias* listaMaterias){
+    int i;
+    char ok[4];
+    
+    printf("%4s %-50s %4s %4s/%1s %5s\n", "Cod.", "Nome", "Cred", "Ano", "S", "Media");
+    for ( i = 0; i < index_mat; i++) {
+        if(listaMaterias[i].codigo > 0){
+            printf("%04d %-50s %4d %4d/%d %05.2lf\n", listaMaterias[i].codigo, listaMaterias[i].nome, listaMaterias[i].cred, listaMaterias[i].ano, listaMaterias[i].semestre, listaMaterias[i].media);
+        }
+    }
+    while (strcmp(ok, "Ok") != 0){
+        scanf("%s", ok);
+    }
+}
+void listar_sem(int index_mat, int ano, int sem, materias* listaMaterias){
+    int i;
+    char ok[4] ="";
+    
+    printf("%4s %-50s %4s %4s/%1s %5s\n", "Cod.", "Nome", "Cred", "Ano", "S", "Media");
+    for ( i = 0; i < index_mat; i++) {
+        if(listaMaterias[i].ano == ano && listaMaterias[i].semestre == sem){
+            printf("%04d %-50s %4d %4d/%d %05.2lf\n", listaMaterias[i].codigo, listaMaterias[i].nome, listaMaterias[i].cred, listaMaterias[i].ano, listaMaterias[i].semestre, listaMaterias[i].media);
+        }
+    }
+    while (strcmp(ok, "Ok") != 0){
+        scanf("%s", ok);
+    }
+}
+void listar_nome(int index_mat, char* nome, materias* listaMaterias){
+    int i;
+    char ok[4] ="";
+    
+    printf("%4s %-50s %4s %4s/%1s %5s\n", "Cod.", "Nome", "Cred", "Ano", "S", "Media");
+    for ( i = 0; i < index_mat; i++) {
+        if(strstr(listaMaterias[i].prof, nome) != NULL || strstr(listaMaterias[i].nome, nome) != NULL){
+            printf("%04d %-50s %4d %4d/%d %05.2lf\n", listaMaterias[i].codigo, listaMaterias[i].nome, listaMaterias[i].cred, listaMaterias[i].ano, listaMaterias[i].semestre, listaMaterias[i].media);
+        }
+    }
+    while (strcmp(ok, "Ok") != 0){
+        scanf("%s", ok);
+    }
+}
+
+void historico(int index_mat, materias* listaMaterias){
+    int i, num_cred = 0;
+    char ok[4] ="";
+    double nota = 0;
+    
+    printf("%4s %-50s %4s %4s/%1s %5s\n", "Cod.", "Nome", "Cred", "Ano", "S", "Media");
+    for ( i = 0; i < index_mat; i++) {
+        if(listaMaterias[i].codigo >= 0){
+            printf("%04d %-50s %4d %4d/%d %05.2lf\n", listaMaterias[i].codigo, listaMaterias[i].nome, listaMaterias[i].cred, listaMaterias[i].ano, listaMaterias[i].semestre, listaMaterias[i].media);
+            num_cred += listaMaterias[i].cred;
+            nota += listaMaterias[i].media * listaMaterias[i].cred;
+        }
+    }
+    if(num_cred > 0){
+        nota = nota/num_cred;
+    } else {
+        nota = 0.0;
+    }
+    printf("%-67s %05.2lf\n", "Coeficiente de Rendimento", nota);
+    while (strcmp(ok, "Ok") != 0){
+        scanf("%s", ok);
+    }
+}
+
+int menu(){
+    int resposta = 0;
+    
+    while (resposta < 1 || resposta > 8){
+        printf("1 - inserir nova disciplina\n2 - remover disciplina pelo codigo\n3 - alterar disciplina pelo codigo\n"
+        "4 - listar todas as disciplinas\n5 - listar disciplinas de um ano/semestre\n6 - listar disciplinas pelo nome/professor\n"
+        "7 - Historico\n8 - sair\nEntre com a sua opcao:\n");
+        scanf("%d", &resposta);
+    }
+    return resposta;
+    
+}
+
+int main()
+{
+    materias listaMaterias[25];
+    int index_mat = 0;
+    int i, codigo, ano, semestre;
+    materias materia;
+    char nome[201];
+    bool rodando = true;
+    while(rodando){
+     switch(menu()){
+        case 1:
+            input(&materia);
+            materia.media = media(materia.nt1, materia.nt2);
+            printf("Disciplina inserida com sucesso!\n");
+            listaMaterias[index_mat] = materia;
+            index_mat++;
+            break;
+        case 2:
+            scanf("%d", &codigo);
+            i = achar_codigo(codigo, index_mat, listaMaterias);
+            if(i >= 0){
+                listaMaterias[i].codigo = -1;
+                printf("Disciplina removida com sucesso!\n");
+            } else {
+                printf("Disciplina nao encontrada!\n");
+            }
+            break;
+        case 3:
+             scanf("%d", &codigo);
+             i = achar_codigo(codigo, index_mat, listaMaterias);
+            if(i >= 0){
+                input(&materia);
+                materia.media = media(materia.nt1, materia.nt2);
+                printf("Disciplina alterada com sucesso!\n");
+                listaMaterias[i] = materia;
+            } else {
+                printf("Disciplina nao encontrada!\n");
+            }
+            break;
+        case 4:
+            listar(index_mat, listaMaterias);
+            break;
+        case 5:
+            scanf("%d %d", &ano, &semestre);
+            listar_sem(index_mat, ano, semestre, listaMaterias);
+            break;
+        case 6:
+            scanf(" %[^\n]%*c", nome); 
+            listar_nome(index_mat, nome, listaMaterias);
+            break;
+        case 7:
+            historico(index_mat, listaMaterias);
+            break;
+        case 8:
+            printf("Obrigado por utilizar o programa de cadastro, volte sempre!\n");
+            rodando = false;
+            break;
+    }
+    }
+    return 0;
+}
