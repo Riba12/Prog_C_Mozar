@@ -1,0 +1,38 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdbool.h>
+
+
+bool palin(char *palavra){
+    int a = 0;
+    int b = strlen(palavra) - 1;
+    
+    while(a < b){
+        if (palavra[a] != palavra[b]){
+            return false;
+        }
+        a += 1;
+        b -= 1;
+    }
+    return true;
+}
+
+
+int main()
+{
+   
+   char palavra[1001];
+   bool r;
+   
+   scanf("%[^\n]", palavra);
+   r = palin(palavra);
+   if (r){
+        printf("A frase [%s] eh palindrome\n", palavra);
+   } else {
+       printf("A frase [%s] nao eh palindrome\n", palavra);
+   }
+   
+    return 0;
+} 
+
+
